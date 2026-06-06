@@ -1,0 +1,21 @@
+# Core ML
+torch
+torchaudio
+transformers>=4.44
+accelerate
+datasets
+numpy
+
+# Metrics / Japanese segmentation
+jiwer
+fugashi
+unidic-lite
+regex
+
+# Audio I/O
+soundfile
+librosa
+
+# ASR baselines
+faster-whisper
+liquid-audio

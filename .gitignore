@@ -1,0 +1,25 @@
+# Python venv — recreate from requirements.txt on the target machine
+.venv/
+__pycache__/
+*.pyc
+
+# Model / dataset caches (re-downloaded on target GPU)
+models/
+.cache/
+*.safetensors
+*.bin
+
+# Audio & generated data (large / not for git)
+data/csfleurs/
+data/human_eval/audio/
+*.wav
+*.flac
+*.mp3
+
+# Run outputs
+artifacts/
+*.log
+
+# Secrets
+.env
+*.key
