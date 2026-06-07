@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>On-device EN–JP Code-Switching ASR · LFM2.5-Audio</title>
+<title>オンデバイス 日英コードスイッチング ASR · LFM2.5-Audio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=IBM+Plex+Sans+JP:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#06080f; --bg2:#0a0e1a; --panel:#0d1322; --panel2:#111a2e;
+    --bg:#06080f; --panel:#0d1322; --panel2:#111a2e;
     --line:rgba(125,165,210,.14); --line2:rgba(125,165,210,.28);
     --ink:#eaf0f8; --mut:#8a99b3; --dim:#5e6c84;
     --aqua:#37e6c9; --blue:#4da3ff; --bad:#ff7a7a;
@@ -18,97 +18,100 @@
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{
-    background:var(--bg); color:var(--ink); font-family:var(--body); font-weight:300;
-    -webkit-font-smoothing:antialiased; overflow-x:hidden;
-  }
-  /* ── ambient liquid background ── */
+  body{background:var(--bg); color:var(--ink); font-family:var(--body); font-weight:300; -webkit-font-smoothing:antialiased; overflow-x:hidden}
   .bg{position:fixed; inset:0; z-index:-2; overflow:hidden; background:
       radial-gradient(120% 90% at 80% -10%, #0b1426 0%, transparent 55%),
-      radial-gradient(100% 80% at -10% 110%, #08131a 0%, transparent 50%), var(--bg);}
+      radial-gradient(100% 80% at -10% 110%, #08131a 0%, transparent 50%), var(--bg)}
   .blob{position:absolute; border-radius:50%; filter:blur(90px); opacity:.42; mix-blend-mode:screen; animation:drift 26s ease-in-out infinite}
   .b1{width:46vw;height:46vw; left:-8vw; top:-10vw; background:radial-gradient(circle,#0e7c6e,transparent 65%)}
   .b2{width:40vw;height:40vw; right:-6vw; top:18vh; background:radial-gradient(circle,#1d5fa8,transparent 65%); animation-delay:-8s}
   .b3{width:38vw;height:38vw; left:30vw; bottom:-14vw; background:radial-gradient(circle,#11857a,transparent 65%); animation-delay:-15s}
   @keyframes drift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(6vw,4vh) scale(1.12)}66%{transform:translate(-4vw,-3vh) scale(.94)}}
   .grain{position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.05;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
-  /* ── deck / slides ── */
   .deck{scroll-snap-type:y mandatory; height:100vh; overflow-y:scroll}
   .deck::-webkit-scrollbar{display:none}
-  .slide{scroll-snap-align:start; min-height:100vh; display:flex; align-items:center;
-    padding:84px clamp(28px,7vw,140px) 92px; position:relative}
-  .wrap{width:100%; max-width:1180px; margin:0 auto}
+  .slide{scroll-snap-align:start; min-height:100vh; display:flex; align-items:center; padding:80px clamp(26px,6vw,130px) 84px; position:relative}
+  .wrap{width:100%; max-width:1200px; margin:0 auto}
 
-  /* reveal */
-  .r{opacity:0; transform:translateY(22px); filter:blur(6px); transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1), filter .7s}
-  .seen .r{opacity:1; transform:none; filter:none}
-  .seen .r{transition-delay:calc(var(--i,0)*90ms)}
+  .r{opacity:0; transform:translateY(20px); filter:blur(6px); transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1), filter .7s}
+  .seen .r{opacity:1; transform:none; filter:none; transition-delay:calc(var(--i,0)*80ms)}
 
-  /* type */
-  h1{font-family:var(--disp); font-weight:800; font-size:clamp(40px,6.4vw,88px); line-height:1.02; letter-spacing:-.025em}
-  h2{font-family:var(--disp); font-weight:700; font-size:clamp(28px,3.9vw,52px); line-height:1.05; letter-spacing:-.02em}
-  .kicker{font-family:var(--mono); font-size:13px; letter-spacing:.32em; text-transform:uppercase; color:var(--aqua); margin-bottom:22px; display:flex; align-items:center; gap:12px}
-  .kicker::before{content:""; width:30px; height:2px; background:var(--grad); display:inline-block}
-  .lead{font-size:clamp(16px,1.5vw,20px); color:var(--mut); line-height:1.6; font-weight:300; max-width:62ch}
+  h1{font-family:var(--disp); font-weight:800; font-size:clamp(34px,5vw,68px); line-height:1.08; letter-spacing:-.02em}
+  h2{font-family:var(--disp); font-weight:700; font-size:clamp(25px,3.3vw,44px); line-height:1.12; letter-spacing:-.015em}
+  /* EN translation under a JA element */
+  .t{display:block; color:var(--blue); font-weight:400; letter-spacing:.005em}
+  h1 .t{font-family:var(--body); font-size:.32em; margin-top:14px; color:var(--mut)}
+  h2 .t{font-family:var(--body); font-size:.42em; font-weight:400; margin-top:9px; color:var(--mut)}
+  .kicker{font-family:var(--mono); font-size:12px; letter-spacing:.28em; text-transform:uppercase; color:var(--aqua); margin-bottom:20px; display:flex; align-items:center; gap:12px}
+  .kicker::before{content:""; width:28px; height:2px; background:var(--grad)}
+  .lead{font-size:clamp(15px,1.4vw,19px); color:var(--ink); line-height:1.55; font-weight:300; max-width:66ch}
+  .lead .t{font-size:.82em; color:var(--mut); margin-top:5px}
   .grad{background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent}
   .mono{font-family:var(--mono)} .en{color:var(--aqua); font-weight:500}
   b,strong{font-weight:600; color:#fff}
 
-  /* panels / cards */
-  .panel{background:linear-gradient(180deg,var(--panel),var(--panel2)); border:1px solid var(--line); border-radius:18px}
-  .grid{display:grid; gap:18px}
-  .card{background:linear-gradient(180deg,rgba(18,26,46,.7),rgba(12,18,32,.7)); border:1px solid var(--line); border-radius:16px; padding:24px 24px 26px; position:relative; overflow:hidden}
-  .card::before{content:""; position:absolute; left:0; top:0; height:100%; width:3px; background:var(--grad); opacity:.0; transition:opacity .4s}
+  .panel{background:linear-gradient(180deg,var(--panel),var(--panel2)); border:1px solid var(--line); border-radius:16px}
+  .grid{display:grid; gap:16px}
+  .card{background:linear-gradient(180deg,rgba(18,26,46,.7),rgba(12,18,32,.7)); border:1px solid var(--line); border-radius:15px; padding:20px 21px; position:relative; overflow:hidden}
+  .card::before{content:""; position:absolute; left:0; top:0; height:100%; width:3px; background:var(--grad); opacity:0; transition:opacity .4s}
   .card:hover::before{opacity:1}
-  .card h3{font-family:var(--disp); font-weight:600; font-size:20px; margin-bottom:9px; letter-spacing:-.01em}
-  .card p{color:var(--mut); font-size:14.5px; line-height:1.55}
-  .card .ic{font-family:var(--mono); font-size:13px; color:var(--blue); letter-spacing:.2em; margin-bottom:14px}
+  .card h3{font-family:var(--disp); font-weight:600; font-size:18px; margin-bottom:4px; letter-spacing:-.01em}
+  .card h3 .t{font-size:.66em; color:var(--mut); font-weight:400; margin-top:2px; font-family:var(--body)}
+  .card p{color:var(--mut); font-size:13.5px; line-height:1.5; margin-top:8px}
+  .card p .t{display:block; color:var(--dim); font-size:.92em; margin-top:3px}
+  .card .ic{font-family:var(--mono); font-size:12px; color:var(--blue); letter-spacing:.18em; margin-bottom:12px}
 
-  /* table */
-  table{width:100%; border-collapse:collapse; font-size:15px}
-  th,td{text-align:right; padding:13px 16px; border-bottom:1px solid var(--line)}
+  table{width:100%; border-collapse:collapse; font-size:13.5px}
+  th,td{text-align:right; padding:9px 11px; border-bottom:1px solid var(--line)}
   th:first-child,td:first-child{text-align:left}
-  thead th{font-family:var(--mono); font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--mut); font-weight:500}
+  thead .grp th{font-family:var(--mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--blue); font-weight:500; border-bottom:none; padding-bottom:2px; text-align:center}
+  thead .grp th:first-child{border:none}
+  thead .hd th{font-family:var(--mono); font-size:10.5px; letter-spacing:.04em; color:var(--mut); font-weight:500}
   tbody td{font-family:var(--mono); color:var(--ink)} tbody td:first-child{font-family:var(--body)}
-  tr.best{background:linear-gradient(90deg,rgba(55,230,201,.14),rgba(77,163,255,.06)); }
+  tr.best{background:linear-gradient(90deg,rgba(55,230,201,.15),rgba(77,163,255,.05))}
   tr.best td{color:#fff; font-weight:600; border-bottom:1px solid var(--line2)}
   tr.best td:first-child::after{content:" ★"; color:var(--aqua)}
   .muted-row td{color:var(--mut)}
+  .colsep{border-left:1px solid var(--line)}
 
-  /* stat chips */
-  .chips{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:26px}
-  .chip{background:linear-gradient(180deg,rgba(18,26,46,.8),rgba(12,18,32,.6)); border:1px solid var(--line); border-radius:14px; padding:20px}
-  .chip .n{font-family:var(--disp); font-weight:800; font-size:clamp(26px,2.7vw,38px); letter-spacing:-.02em}
-  .chip .l{font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--mut); margin-top:6px}
+  .chips{display:grid; grid-template-columns:repeat(4,1fr); gap:14px}
+  .chip{background:linear-gradient(180deg,rgba(18,26,46,.8),rgba(12,18,32,.6)); border:1px solid var(--line); border-radius:13px; padding:17px 18px}
+  .chip .n{font-family:var(--disp); font-weight:800; font-size:clamp(22px,2.3vw,32px); letter-spacing:-.02em}
+  .chip .l{font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--mut); margin-top:5px}
 
-  /* demo */
-  .ex{padding:20px 22px}
-  .ex .tag{font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; margin-bottom:8px}
-  .ex .ln{font-size:15.5px; line-height:1.5; margin-bottom:14px}
+  .ex{padding:17px 19px}
+  .ex .tag{font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; margin-bottom:9px}
+  .ex .ln{font-size:14px; line-height:1.5; margin-bottom:11px}
   .ex .ln:last-child{margin-bottom:0}
-  .ex small{display:block; font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; color:var(--dim); margin-bottom:3px}
-  .ok{color:var(--aqua)} .ko{color:var(--bad)}
-  .ref{color:var(--mut)}
+  .ex small{display:block; font-family:var(--mono); font-size:10px; letter-spacing:.12em; color:var(--dim); margin-bottom:3px}
+  .ok{color:var(--aqua)} .ko{color:var(--bad)} .ref{color:var(--mut)}
 
-  /* chrome */
-  .topbar{position:fixed; top:0; left:0; right:0; z-index:20; display:flex; justify-content:space-between; align-items:center;
-    padding:18px clamp(20px,5vw,48px); font-family:var(--mono); font-size:12px; letter-spacing:.14em; color:var(--mut);
-    background:linear-gradient(180deg,rgba(6,8,15,.85),transparent); backdrop-filter:blur(6px)}
+  .tasks{display:grid; grid-template-columns:repeat(4,1fr); gap:11px}
+  .task{background:rgba(18,26,46,.55); border:1px solid var(--line); border-radius:11px; padding:13px 14px}
+  .task .num{font-family:var(--mono); font-size:11px; color:var(--aqua); letter-spacing:.1em}
+  .task .ja{font-size:13.5px; font-weight:500; color:var(--ink); margin-top:5px; line-height:1.3}
+  .task .t{color:var(--dim); font-size:11px; margin-top:2px; letter-spacing:0}
+  .task.core{border-color:rgba(55,230,201,.4); background:linear-gradient(180deg,rgba(55,230,201,.09),rgba(18,26,46,.5))}
+  .task.core .num{color:var(--aqua)}
+  .task.bonus{opacity:.92}
+  .glabel{font-family:var(--mono); font-size:11px; letter-spacing:.13em; text-transform:uppercase; color:var(--mut); margin:0 0 11px; display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+  .glabel.core{color:var(--aqua)}
+  .glabel .b{font-family:var(--body); text-transform:none; letter-spacing:0; color:var(--dim); font-size:12px; font-weight:300}
+  .badge{display:inline-block; font-family:var(--mono); font-size:9.5px; letter-spacing:.08em; color:#04261d; background:var(--aqua); padding:2px 8px; border-radius:999px}
+
+  .topbar{position:fixed; top:0; left:0; right:0; z-index:20; display:flex; justify-content:space-between; align-items:center; padding:16px clamp(20px,5vw,44px); font-family:var(--mono); font-size:11.5px; letter-spacing:.13em; color:var(--mut); background:linear-gradient(180deg,rgba(6,8,15,.85),transparent); backdrop-filter:blur(6px)}
   .logo{display:flex; align-items:center; gap:10px; color:var(--ink)}
-  .logo .d{width:13px; height:13px; border-radius:4px; background:var(--grad); box-shadow:0 0 16px rgba(55,230,201,.6); transform:rotate(45deg)}
-  .dots{display:flex; gap:9px}
-  .dots a{width:8px; height:8px; border-radius:50%; background:rgba(160,180,210,.22); transition:.3s; display:block}
-  .dots a.on{background:var(--grad); transform:scale(1.35); box-shadow:0 0 12px rgba(77,163,255,.7)}
+  .logo .d{width:12px; height:12px; border-radius:4px; background:var(--grad); box-shadow:0 0 16px rgba(55,230,201,.6); transform:rotate(45deg)}
+  .dots{display:flex; gap:8px}
+  .dots a{width:7px; height:7px; border-radius:50%; background:rgba(160,180,210,.22); transition:.3s; display:block}
+  .dots a.on{background:var(--grad); transform:scale(1.4); box-shadow:0 0 12px rgba(77,163,255,.7)}
   .prog{position:fixed; left:0; bottom:0; height:3px; background:var(--grad); z-index:20; width:0; transition:width .25s; box-shadow:0 0 14px rgba(55,230,201,.7)}
-  .foot{position:fixed; bottom:16px; right:clamp(20px,5vw,48px); z-index:20; font-family:var(--mono); font-size:11px; letter-spacing:.14em; color:var(--dim)}
+  .foot{position:fixed; bottom:14px; right:clamp(20px,5vw,44px); z-index:20; font-family:var(--mono); font-size:10.5px; letter-spacing:.13em; color:var(--dim)}
   .foot b{color:var(--aqua); font-weight:500}
 
-  @media (max-width:820px){
-    .chips{grid-template-columns:repeat(2,1fr)} .two{grid-template-columns:1fr!important}
-    .dots{display:none} table{font-size:13px} th,td{padding:10px}
-  }
+  @media (max-width:880px){.chips,.tasks{grid-template-columns:repeat(2,1fr)} .two{grid-template-columns:1fr!important} .dots{display:none} table{font-size:11.5px} th,td{padding:7px}}
   @media (prefers-reduced-motion:reduce){.blob{animation:none}.r{transition:none}}
 </style>
 </head>
@@ -121,186 +124,257 @@
   <nav class="dots" id="dots"></nav>
 </header>
 <div class="prog" id="prog"></div>
-<div class="foot">← / → &nbsp;navigate &nbsp;·&nbsp; <b>Hack the Liquid WAY ’26</b></div>
+<div class="foot">← / → &nbsp;ナビゲート &nbsp;·&nbsp; <b>Hack the Liquid WAY ’26</b></div>
 
 <main class="deck" id="deck">
 
   <!-- 1 · TITLE -->
-  <section class="slide">
-    <div class="wrap">
-      <div class="kicker r" style="--i:0">Hack the Liquid WAY · Tokyo · June 2026</div>
-      <h1 class="r" style="--i:1">On-device <span class="grad">EN–JP<br>code-switching</span> ASR</h1>
-      <p class="lead r" style="--i:2; margin-top:24px">
-        Fine-tuning <b>LiquidAI/LFM2.5-Audio-1.5B-JP</b> to transcribe bilingual speech
-        <b>keeping each language in its own script</b> — private, fully on-device.
-      </p>
-      <div class="panel r" style="--i:3; margin-top:34px; padding:22px 26px; font-size:clamp(16px,1.7vw,22px); line-height:1.7; max-width:none">
-        いつも さっき見た <span class="en">shirt</span> かなり <span class="en">cool</span> じゃない でも <span class="en">a bit expensive</span> かな
-        <div style="font-family:var(--mono); font-size:11px; letter-spacing:.18em; color:var(--dim); margin-top:12px">↑ English stays in Latin — not forced into katakana</div>
-      </div>
+  <section class="slide"><div class="wrap">
+    <div class="kicker r" style="--i:0">Hack the Liquid WAY · 東京 · 2026年6月</div>
+    <h1 class="r" style="--i:1">オンデバイス <span class="grad">日英コードスイッチング</span> 音声認識
+      <span class="t">On-device EN–JP code-switching speech recognition</span></h1>
+    <p class="lead r" style="--i:2; margin-top:22px">
+      <b>LiquidAI/LFM2.5-Audio-1.5B-JP</b> をファインチューンし、混在した二言語音声を<b>それぞれ正しい文字体系のまま</b>文字起こしする — 完全オンデバイス、プライバシー保護。
+      <span class="t">Fine-tuning LFM2.5-Audio-1.5B-JP to transcribe bilingual speech, keeping each language in its own script — fully on-device, private.</span>
+    </p>
+    <div class="panel r" style="--i:3; margin-top:30px; padding:20px 24px; font-size:clamp(15px,1.6vw,21px); line-height:1.7">
+      いつも さっき見た <span class="en">shirt</span> かなり <span class="en">cool</span> じゃない でも <span class="en">a bit expensive</span> かな
+      <div class="t" style="font-family:var(--mono); font-size:11px; letter-spacing:.16em; color:var(--dim); margin-top:11px">英語は katakana にされず Latin のまま · English stays in Latin — not forced into katakana</div>
     </div>
-  </section>
+  </div></section>
 
   <!-- 2 · PROBLEM -->
-  <section class="slide">
-    <div class="wrap">
-      <div class="kicker r" style="--i:0">The problem</div>
-      <h2 class="r" style="--i:1">Cloud ASR <span class="grad">mangles</span> bilingual Japanese speech</h2>
-      <div class="grid two r" style="--i:2; grid-template-columns:1fr 1fr; margin:30px 0 22px">
-        <div class="card">
-          <div class="ic">01 / SCRIPT</div>
-          <h3>English → katakana garble</h3>
-          <p>Japanese meetings mix in English constantly. Generic ASR force-converts English into katakana and drops the minority language — the transcript becomes unreadable.</p>
-        </div>
-        <div class="card">
-          <div class="ic">02 / PRIVACY</div>
-          <h3>APPI says: don’t send it to the cloud</h3>
-          <p>Under Japan’s Act on Protection of Personal Information, confidential meeting audio often can’t leave the device — ruling out cloud ASR entirely.</p>
-        </div>
-      </div>
-      <div class="panel ex r" style="--i:3">
-        <div class="tag" style="color:var(--mut)">reference · 田舎道の運転 …</div>
-        <div class="ln"><small>cloud / base ASR</small><span class="ref">…</span> <span class="ko">スティープグレーズ</span>、狭い<span class="ko">レーンズ</span>、そして <span class="ko">シャープカーブ</span> に注意し…</div>
-        <div class="ln"><small>what was actually said</small>… <span class="en">steep grades</span>、狭い <span class="en">lanes</span>、そして <span class="en">sharp curves</span> に注意し…</div>
-      </div>
+  <section class="slide"><div class="wrap">
+    <div class="kicker r" style="--i:0">課題 · The problem</div>
+    <h2 class="r" style="--i:1">クラウド音声認識は日本語の二言語音声を<span class="grad">壊す</span>
+      <span class="t">Cloud ASR mangles bilingual Japanese speech</span></h2>
+    <div class="grid two r" style="--i:2; grid-template-columns:1fr 1fr; margin:26px 0 18px">
+      <div class="card"><div class="ic">01 / 文字体系</div>
+        <h3>英語が katakana に化ける<span class="t">English → katakana garble</span></h3>
+        <p>日本語の会議には英語が頻繁に混ざる。一般的なASRは英語を無理にカタカナへ変換し、少数言語を落とす — 文字起こしが読めなくなる。
+          <span class="t">Meetings mix in English constantly; generic ASR force-converts it to katakana and drops the minority language.</span></p></div>
+      <div class="card"><div class="ic">02 / プライバシー</div>
+        <h3>APPI: クラウドに送れない<span class="t">APPI: can't send it to the cloud</span></h3>
+        <p>個人情報保護法（APPI）の下、機密の会議音声は端末から出せないことが多く、クラウドASRは選択肢にならない。
+          <span class="t">Under Japan's APPI, confidential meeting audio often can't leave the device — ruling out cloud ASR.</span></p></div>
     </div>
-  </section>
+    <div class="panel ex r" style="--i:3">
+      <div class="tag ref">参照 reference · 田舎道の運転 …</div>
+      <div class="ln"><small class="ko">クラウド / ベースASR</small>… <span class="ko">スティープグレーズ</span>、狭い<span class="ko">レーンズ</span>、そして <span class="ko">シャープカーブ</span> に注意し…</div>
+      <div class="ln"><small>実際に話された内容 · what was said</small>… <span class="en">steep grades</span>、狭い <span class="en">lanes</span>、そして <span class="en">sharp curves</span> に注意し…</div>
+    </div>
+  </div></section>
 
   <!-- 3 · WHY LFM -->
-  <section class="slide">
-    <div class="wrap">
-      <div class="kicker r" style="--i:0">Why LFM2.5-Audio</div>
-      <h2 class="r" style="--i:1">A foundation model that <span class="grad">runs on the edge</span></h2>
-      <div class="grid r" style="--i:2; grid-template-columns:repeat(2,1fr); margin-top:30px">
-        <div class="card"><div class="ic">ARCHITECTURE</div><h3>Hybrid SSM + attention</h3><p>Liquid Foundation Model design — efficient long-context processing without the cost of pure attention.</p></div>
-        <div class="card"><div class="ic">AUDIO-NATIVE</div><h3>FastConformer + LM</h3><p>Speech encoder feeds a language model directly — one model hears audio and writes text, no bolt-on pipeline.</p></div>
-        <div class="card"><div class="ic">~1.5B PARAMS</div><h3>On-device & private</h3><p>Small enough to run locally on a laptop / edge device — low latency, no audio ever leaves the machine.</p></div>
-        <div class="card"><div class="ic">JAPANESE</div><h3>The <span class="mono">-JP</span> variant</h3><p>A Japanese-specialized base — the right starting point for a bilingual, privacy-first meeting assistant.</p></div>
-      </div>
+  <section class="slide"><div class="wrap">
+    <div class="kicker r" style="--i:0">なぜ LFM2.5-Audio · Why LFM</div>
+    <h2 class="r" style="--i:1">エッジで動く<span class="grad">基盤モデル</span><span class="t">A foundation model that runs on the edge</span></h2>
+    <div class="grid r" style="--i:2; grid-template-columns:repeat(2,1fr); margin-top:26px">
+      <div class="card"><div class="ic">アーキテクチャ</div><h3>ハイブリッド SSM + Attention<span class="t">Hybrid SSM + attention</span></h3><p>純粋なAttentionのコストなしに長文脈を効率処理。<span class="t">Efficient long-context processing without pure-attention cost.</span></p></div>
+      <div class="card"><div class="ic">音声ネイティブ</div><h3>FastConformer + 言語モデル<span class="t">Audio-native FastConformer + LM</span></h3><p>音声エンコーダが言語モデルに直結 — 1モデルで聞いて書く。<span class="t">Encoder feeds the LM directly — one model hears and writes.</span></p></div>
+      <div class="card"><div class="ic">~1.5B パラメータ</div><h3>オンデバイス・プライベート<span class="t">On-device & private</span></h3><p>ノートPC/エッジでローカル動作 — 低遅延、音声は端末外に出ない。<span class="t">Runs locally — low latency, audio never leaves the machine.</span></p></div>
+      <div class="card"><div class="ic">日本語</div><h3><span class="mono">-JP</span> 特化ベース<span class="t">The -JP variant</span></h3><p>日本語特化の基盤 — 二言語アシスタントの正しい出発点。<span class="t">A Japanese-specialized base — the right starting point.</span></p></div>
     </div>
-  </section>
+  </div></section>
 
   <!-- 4 · APPROACH -->
-  <section class="slide">
-    <div class="wrap">
-      <div class="kicker r" style="--i:0">Our approach</div>
-      <h2 class="r" style="--i:1">LoRA where it counts — <span class="grad">the audio encoder</span></h2>
-      <div class="grid two r" style="--i:2; grid-template-columns:1.05fr .95fr; margin-top:30px; align-items:stretch">
-        <div class="card">
-          <div class="ic">RECIPE</div>
+  <section class="slide"><div class="wrap">
+    <div class="kicker r" style="--i:0">アプローチ · Our approach</div>
+    <h2 class="r" style="--i:1">効くのは<span class="grad">音声エンコーダ</span>への LoRA<span class="t">LoRA where it counts — the audio encoder</span></h2>
+    <div class="grid r" style="--i:2; grid-template-columns:1.55fr 1fr; gap:22px; align-items:start; margin-top:22px">
+      <div class="grid" style="gap:14px">
+        <div class="card"><div class="ic">レシピ RECIPE</div>
           <h3>r=8 LM + r=32 Conformer LoRA</h3>
-          <p style="margin-bottom:14px">Frozen base + LoRA (via PEFT) on both the language model <i>and</i> the Conformer audio encoder — encoder rank-32 is what fixed the grounding.</p>
-          <p>Trained on a synthetic CS / EN / JA corpus <b>balanced with FLEURS</b> real speech, one standard <span class="mono">"Perform ASR."</span> prompt. <b>Trained on Hugging Face GPUs.</b></p>
-        </div>
-        <div class="card">
-          <div class="ic">FROZEN BENCHMARK</div>
-          <h3>A matched forgetting control</h3>
-          <p style="margin-bottom:14px">Every model scored on the same held-out set: <b>CS-FLEURS</b> (196 code-switched) + <b>FLEURS</b> ja_jp & en_us (200 each) — same sentences/speakers, so monolingual loss is attributable, not domain drift.</p>
-          <p><span class="mono" style="color:var(--aqua)">Script Accuracy</span> = % of English kept in Latin · plus MER, JA-CER/WER, EN-WER.</p>
-        </div>
+          <p>ベースを凍結し、PEFTで言語モデル<i>と</i>Conformer音声エンコーダの両方にLoRA。encoderのrank-32がグラウンディングを改善した。
+            <span class="t">Frozen base + LoRA on both the LM and the Conformer encoder — encoder rank-32 fixed the grounding.</span></p></div>
+        <div class="card"><div class="ic">データ DATA</div>
+          <h3>合成データ × FLEURS<span class="t">Synthetic data × FLEURS</span></h3>
+          <p>自作の合成 CS/EN/JA データに <b>FLEURS の学習セットを混合</b>して訓練。評価は <b>FLEURS から作った独自評価セット</b>で実施。統一プロンプト <span class="mono">"Perform ASR."</span>、<b>学習はHugging Face GPU上</b>。
+            <span class="t">Mixed FLEURS train data into our synthetic CS/EN/JA corpus; evaluated on a custom FLEURS-derived eval set. One "Perform ASR." prompt, trained on Hugging Face GPUs.</span></p></div>
+        <p class="lead" style="font-size:12px; max-width:none; color:var(--mut)">
+          凍結ベンチマーク: <b>CS-FLEURS</b>（196 CS）+ <b>FLEURS</b> ja_jp / en_us（各200）— 整合した忘却コントロール。
+          <span class="t">Frozen benchmark: CS-FLEURS (196) + FLEURS ja_jp/en_us (200 each) — a matched forgetting control.</span>
+        </p>
       </div>
+      <figure class="panel" style="padding:12px; margin:0; overflow:hidden">
+        <img src="dataset_rows.png" alt="CS training data — full_transcription rows" style="width:100%; max-height:52vh; object-fit:contain; border-radius:9px; display:block; border:1px solid var(--line)">
+        <figcaption style="font-family:var(--mono); font-size:10px; letter-spacing:.08em; color:var(--mut); margin-top:9px; text-align:center">CS 学習データ例 · <span style="color:var(--aqua)">full_transcription</span> / CS training-data format</figcaption>
+      </figure>
     </div>
-  </section>
+  </div></section>
+
+  <!-- 4b · TRAINING CONVERGENCE -->
+  <section class="slide"><div class="wrap">
+    <div class="kicker r" style="--i:0">学習 · Training</div>
+    <h2 class="r" style="--i:1">安定した収束 — <span class="grad">Hugging Face GPU</span> 上で学習<span class="t">Stable convergence — trained on Hugging Face GPUs</span></h2>
+    <figure class="panel r" style="--i:2; margin:22px 0 0; padding:16px 18px 12px">
+      <img src="train_loss.png" alt="training loss curve" style="width:100%; max-height:40vh; object-fit:contain; display:block; border-radius:8px">
+      <figcaption style="font-family:var(--mono); font-size:11px; letter-spacing:.1em; color:var(--mut); margin-top:10px; text-align:center">学習ロス · training loss（rank-32 Conformer LoRA · 4,000 steps）</figcaption>
+    </figure>
+    <div class="grid r" style="--i:3; grid-template-columns:1fr 1.05fr; gap:22px; margin-top:18px; align-items:center">
+      <figure class="panel" style="margin:0; padding:13px 15px 9px">
+        <img src="eval_loss.png" alt="validation loss curve" style="width:100%; max-height:25vh; object-fit:contain; display:block; border-radius:8px">
+        <figcaption style="font-family:var(--mono); font-size:11px; letter-spacing:.1em; color:var(--mut); margin-top:9px; text-align:center">検証ロス · validation loss</figcaption>
+      </figure>
+      <p class="lead" style="font-size:14px; max-width:none">
+        学習・検証ロスがともに滑らかに低下 — 過学習なく収束。最良チェックポイントは英語モノリンガルWERで早期停止して選択。
+        <span class="t">Training and validation loss both fall smoothly — converges without overfitting. The best checkpoint is chosen by early-stopping on English-mono WER.</span>
+      </p>
+    </div>
+  </div></section>
 
   <!-- 5 · RESULTS -->
-  <section class="slide">
-    <div class="wrap">
-      <div class="kicker r" style="--i:0">Results · frozen benchmark</div>
-      <h2 class="r" style="--i:1; margin-bottom:8px">We <span class="grad">beat Whisper</span> on code-switching — without forgetting Japanese</h2>
-      <div class="chips r" style="--i:2; margin-top:26px">
-        <div class="chip"><div class="n grad">37→81%</div><div class="l">CS Script Acc</div></div>
-        <div class="chip"><div class="n grad">67→27%</div><div class="l">CS MER ↓</div></div>
-        <div class="chip"><div class="n grad">6.6→6.4</div><div class="l">JA-CER · no forgetting</div></div>
-        <div class="chip"><div class="n grad">68→37%</div><div class="l">EN-WER ↓</div></div>
-      </div>
-      <div class="panel r" style="--i:3; padding:8px 18px">
-        <table>
-          <thead><tr><th>Model</th><th>CS ScriptAcc ↑</th><th>CS MER ↓</th><th>JA-CER ↓</th><th>EN-WER ↓</th></tr></thead>
-          <tbody>
-            <tr class="muted-row"><td>LFM2.5-Audio (base)</td><td>37.4</td><td>67.3</td><td>6.6</td><td>68.5</td></tr>
-            <tr class="muted-row"><td>Whisper large-v3 (base)</td><td>64.6</td><td>40.9</td><td>6.0</td><td>4.2</td></tr>
-            <tr><td>LFM + LoRA · data-aug</td><td>43.6</td><td>54.3</td><td>8.2</td><td>80.2</td></tr>
-            <tr><td>LFM + LoRA · + encoder LoRA</td><td>61.8</td><td>54.1</td><td>9.4</td><td>73.1</td></tr>
-            <tr class="best"><td>LFM + LoRA · r32 + FLEURS</td><td>80.8</td><td>27.0</td><td>6.4</td><td>37.1</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="lead r" style="--i:4; margin-top:18px; max-width:none; font-size:15px">
-        Ablation tells the story: augmentation (+6 ScriptAcc) → Conformer encoder LoRA (+24) → rank-32 + FLEURS mix (+43). English is the remaining gap vs Whisper’s 4.2%.
-      </p>
+  <section class="slide"><div class="wrap">
+    <div class="kicker r" style="--i:0">結果 · Results — frozen benchmark</div>
+    <h2 class="r" style="--i:1; margin-bottom:6px">コードスイッチで <span class="grad">Whisper超え</span>、日本語も忘れない<span class="t">Beats Whisper on code-switching — without forgetting Japanese</span></h2>
+    <div class="chips r" style="--i:2; margin:22px 0 18px">
+      <div class="chip"><div class="n grad">37→81%</div><div class="l">CS Script Acc</div></div>
+      <div class="chip"><div class="n grad">67→27%</div><div class="l">CS MER ↓</div></div>
+      <div class="chip"><div class="n grad">6.6→6.4</div><div class="l">JA-CER · 忘却なし</div></div>
+      <div class="chip"><div class="n grad">68→37%</div><div class="l">EN-WER ↓</div></div>
     </div>
-  </section>
+    <div class="panel r" style="--i:3; padding:6px 16px">
+      <table>
+        <thead>
+          <tr class="grp"><th></th><th colspan="3">コードスイッチング · CS</th><th colspan="2" class="colsep">日本語 JA-only</th><th colspan="2" class="colsep">英語 EN-only</th></tr>
+          <tr class="hd"><th>Model</th><th>SA↑</th><th>MER↓</th><th>EnWER↓</th><th class="colsep">CER↓</th><th>WER↓</th><th class="colsep">WER↓</th><th>SA↑</th></tr>
+        </thead>
+        <tbody>
+          <tr class="muted-row"><td>LFM2.5-Audio (base)</td><td>37.4</td><td>67.3</td><td>98.1</td><td class="colsep">6.6</td><td>7.6</td><td class="colsep">68.5</td><td>67.8</td></tr>
+          <tr class="muted-row"><td>Whisper large-v3 (base)</td><td>64.6</td><td>40.9</td><td>47.4</td><td class="colsep">6.0</td><td>7.9</td><td class="colsep">4.2</td><td>99.1</td></tr>
+          <tr><td>LFM + LoRA · data-aug</td><td>43.6</td><td>54.3</td><td>96.2</td><td class="colsep">8.2</td><td>8.7</td><td class="colsep">80.2</td><td>79.2</td></tr>
+          <tr><td>LFM + LoRA · + encoder LoRA</td><td>61.8</td><td>54.1</td><td>113.5</td><td class="colsep">9.4</td><td>10.2</td><td class="colsep">73.1</td><td>77.9</td></tr>
+          <tr class="best"><td>LFM + LoRA · r32 + FLEURS</td><td>80.8</td><td>27.0</td><td>52.3</td><td class="colsep">6.4</td><td>7.2</td><td class="colsep">37.1</td><td>94.6</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="lead r" style="--i:4; margin-top:13px; font-size:12.5px; max-width:none; font-family:var(--mono); letter-spacing:.02em; color:var(--mut)">
+      SA = Script Accuracy（英語をLatinで保持） · 段階的改善: 拡張(+6 SA) → encoder LoRA(+24) → r32 + FLEURS(+43)
+    </p>
+  </div></section>
 
-  <!-- 6 · DEMO -->
-  <section class="slide">
-    <div class="wrap">
-      <div class="kicker r" style="--i:0">See it</div>
-      <h2 class="r" style="--i:1">Same audio — <span class="grad">readable</span> vs garbled</h2>
-      <div class="grid two r" style="--i:2; grid-template-columns:1fr 1fr; margin-top:28px">
-        <div class="panel ex">
-          <div class="tag grad">History · naval blockade</div>
-          <div class="ln ref"><small>reference</small>敵対行為の <span class="en">outbreak</span> の後、<span class="en">Britain</span> は <span class="en">Germany</span> に対する <span class="en">naval blockade</span> を <span class="en">initiated</span> しました。</div>
-          <div class="ln"><small class="ok">✅ ours</small>…<span class="en">Britain</span> は <span class="en">Germany</span> に対する <span class="en">naval blockade</span> を <span class="en">initiated</span> しました。</div>
-          <div class="ln"><small class="ko">✗ baseline</small>…<span class="ko">ブリトン</span> は <span class="ko">ジェルミニー</span> に対する <span class="ko">ネイバーブロンケイド</span> を <span class="ko">イニシエイト</span>…</div>
-        </div>
-        <div class="panel ex">
-          <div class="tag grad">Cooking · curry</div>
-          <div class="ln ref"><small>reference</small>カレーは、<span class="en">herbs</span> や <span class="en">spices</span> をベースに、肉や <span class="en">vegetables</span> を煮込む料理です。</div>
-          <div class="ln"><small class="ok">✅ ours</small>カレーは <span class="en">herbs</span> や <span class="en">spices</span> …肉や <span class="en">vegetables</span> を煮込む…</div>
-          <div class="ln"><small class="ko">✗ baseline</small>カレーは <span class="ko">ハーブス</span> や <span class="ko">スパイス</span> …<span class="ko">ベジタブル</span> を…</div>
-        </div>
+  <!-- 6 · DEMO (full outputs) -->
+  <section class="slide"><div class="wrap">
+    <div class="kicker r" style="--i:0">実例 · See it</div>
+    <h2 class="r" style="--i:1">同じ音声 — <span class="grad">読める</span> vs 文字化け<span class="t">Same audio — readable vs garbled</span></h2>
+    <div class="grid two r" style="--i:2; grid-template-columns:1fr 1fr; margin-top:22px">
+      <div class="panel ex">
+        <div class="tag grad">例 1 · 国立公園</div>
+        <div class="ln ref"><small>参照 reference</small>As with all 南アフリカ National Parks, この公園には毎日 conservation と 入園料 がかかります。</div>
+        <div class="ln"><small class="ok">✅ ours</small>As with all 南アフリカ national parks. この公園には毎日 conservation と入園料がかかります。</div>
+        <div class="ln"><small class="ko">✗ Whisper</small><span class="ko">この公園には毎日コンサルベーションと入園料がかかります</span></div>
+        <div class="ln"><small class="ko">✗ LFM base</small><span class="ko">エンスウェッド・オー・南アフリカ・ナショナルパークスこの公園には毎日コンサベーションと入園料がかかります</span></div>
       </div>
-      <p class="lead r" style="--i:3; margin-top:20px; max-width:none; font-size:14px; font-family:var(--mono); letter-spacing:.04em">MER 4% &nbsp;·&nbsp; English kept in Latin 100% &nbsp;·&nbsp; baseline katakana-forces every English term</p>
+      <div class="panel ex">
+        <div class="tag grad">例 2 · 通信理論</div>
+        <div class="ln ref"><small>参照 reference</small>インターネットは、massとinterpersonal communicationの両要素を兼ね備えた環境です。</div>
+        <div class="ln"><small class="ok">✅ ours</small>インターネットは、massとinterpersonal communicationの両要素を兼ね備えた環境です。</div>
+        <div class="ln"><small class="ko">✗ Whisper</small><span class="ko">インターネットはマスとイントロプロソナルコミュニケーションの両要素を含め備えた環境です</span></div>
+        <div class="ln"><small class="ko">✗ LFM base</small><span class="ko">インターネットは、MASとインターネットコミュニケーションの両要素を兼ね備えた環境です。</span></div>
+      </div>
     </div>
-  </section>
+    <p class="lead r" style="--i:3; margin-top:16px; font-size:13px; max-width:none">
+      ✅ 我々のモデルは英語をLatinのまま正確に。 ✗ ベースラインはすべての英語をカタカナに変換、または英語節を丸ごと脱落。
+      <span class="t">✅ Ours keeps English in Latin, accurately. ✗ Baselines katakana-force every English term — or drop the English clause entirely.</span>
+    </p>
+  </div></section>
 
-  <!-- 7 · USE CASES -->
-  <section class="slide">
-    <div class="wrap">
-      <div class="kicker r" style="--i:0">The product</div>
-      <h2 class="r" style="--i:1">会議 <span class="grad">Kaigi</span> — an on-device meeting assistant</h2>
-      <div class="grid r" style="--i:2; grid-template-columns:repeat(3,1fr); margin-top:30px">
-        <div class="card"><div class="ic">A · TRANSCRIBE</div><h3>Live code-switched ASR</h3><p>Real-time bilingual transcription with each language in its correct script.</p></div>
-        <div class="card"><div class="ic">B · SPEAK</div><h3>Translate &amp; speak</h3><p>One-pass JA↔EN translate-and-speak — the room hears the other language live.</p></div>
-        <div class="card"><div class="ic">C · SUMMARIZE</div><h3>Auto minutes</h3><p>Structured meeting minutes generated on-device when the call ends.</p></div>
-      </div>
-      <div class="grid r" style="--i:3; grid-template-columns:repeat(3,1fr); margin-top:18px">
-        <div class="card" style="padding:18px 22px"><p><b>Customer support</b> — private bilingual call transcription.</p></div>
-        <div class="card" style="padding:18px 22px"><p><b>Medical / legal</b> — confidential, never leaves the device.</p></div>
-        <div class="card" style="padding:18px 22px"><p><b>Education</b> — bilingual lecture capture &amp; notes.</p></div>
+  <!-- 7 · ONE MODEL, 8 TASKS + RESOURCES -->
+  <section class="slide"><div class="wrap">
+    <div class="kicker r" style="--i:0">本命 + ボーナス · Core task + bonus capabilities</div>
+    <h2 class="r" style="--i:1">本命は <span class="grad">CS-ASR</span> — そこで SoTA Whisper を超えた<span class="t">Our core task is code-switch ASR — where we beat SoTA Whisper large-v3</span></h2>
+    <div class="r" style="--i:2; margin-top:20px">
+      <div class="glabel core">● 本命タスク — ファインチューンの対象 <span class="badge">CSで Whisper large-v3 超え</span> <span class="b">Core — what we fine-tuned; beats SoTA Whisper on CS</span></div>
+      <div class="tasks" style="grid-template-columns:repeat(3,1fr)">
+        <div class="task core"><div class="num">★ 01</div><div class="ja">コードスイッチ文字起こし<span class="t">Code-switch transcription</span></div></div>
+        <div class="task core"><div class="num">02</div><div class="ja">日本語 文字起こし<span class="t">JA transcription</span></div></div>
+        <div class="task core"><div class="num">03</div><div class="ja">英語 文字起こし<span class="t">EN transcription</span></div></div>
       </div>
     </div>
-  </section>
+    <div class="r" style="--i:3; margin-top:16px">
+      <div class="glabel">○ ボーナス — 統合会議デモ用に試した追加アダプタ <span class="b">Bonus — extra adapters we explored for a unified meeting demo</span></div>
+      <div class="tasks" style="grid-template-columns:repeat(5,1fr)">
+        <div class="task bonus"><div class="num">04</div><div class="ja">日→英 翻訳<span class="t">JA→EN text</span></div></div>
+        <div class="task bonus"><div class="num">05</div><div class="ja">英→日 翻訳<span class="t">EN→JA text</span></div></div>
+        <div class="task bonus"><div class="num">06</div><div class="ja">日→英 音声翻訳<span class="t">JA→EN speech</span></div></div>
+        <div class="task bonus"><div class="num">07</div><div class="ja">英→日 音声翻訳<span class="t">EN→JA speech</span></div></div>
+        <div class="task bonus"><div class="num">08</div><div class="ja">機密 議事録<span class="t">Confidential minutes</span></div></div>
+      </div>
+    </div>
+    <div class="grid r" style="--i:4; grid-template-columns:repeat(3,1fr); margin-top:18px">
+      <div class="chip"><div class="n grad">~6 GB</div><div class="l">CPU RAM · GPUなし no GPU</div></div>
+      <div class="chip"><div class="n grad">FP32 GGUF</div><div class="l">量子化なし · no quantization</div></div>
+      <div class="chip"><div class="n grad">Ryzen PC</div><div class="l">CPUで動作 · runs on-device</div></div>
+    </div>
+    <p class="lead r" style="--i:5; margin-top:14px; font-size:12.5px; max-width:none">
+      Ryzen PC の <b>CPU上</b>で <b>FP32 GGUF</b> 形式（量子化なし、約 <b>6 GB</b> RAM）で動作。1つの音声ベースに <b>1%未満</b>の小さなLoRAを差し替えるだけで、省エネに会議用途の8タスクを担う。ただしボーナスタスクは<b>専用モデルほどの精度ではない</b>。
+      <span class="t">Runs on a Ryzen PC's CPU in FP32 GGUF (no quantization, ~6 GB RAM). One audio base + swappable &lt;1% LoRA adapters → one energy-efficient model for all 8 tasks. The bonus tasks aren't as strong as dedicated models — yet.</span>
+    </p>
+  </div></section>
 
-  <!-- 8 · CLOSE -->
-  <section class="slide">
-    <div class="wrap" style="text-align:center">
-      <div class="kicker r" style="--i:0; justify-content:center">Hack the Liquid WAY · 2026</div>
-      <h1 class="r" style="--i:1">Bilingual speech,<br><span class="grad">in the right script</span>,<br>on your device.</h1>
-      <p class="lead r" style="--i:2; margin:26px auto 0; text-align:center">
-        LFM2.5-Audio + LoRA → <b>80.8% code-switch Script Accuracy</b>, Japanese intact, fully private.
-      </p>
-      <p class="r mono" style="--i:3; margin-top:30px; font-size:12px; letter-spacing:.2em; color:var(--dim)">TRAINED ON HUGGING FACE GPUs &nbsp;·&nbsp; RUNS ON-DEVICE</p>
+  <!-- BONUS · TRANSLATE-AND-SPEAK DATA -->
+  <section class="slide"><div class="wrap">
+    <div class="kicker r" style="--i:0">ボーナス詳細 · Bonus — translate-and-speak</div>
+    <h2 class="r" style="--i:1">翻訳して話す — <span class="grad">データ戦略</span><span class="t">Translate-and-speak — data strategy</span></h2>
+    <div class="grid r" style="--i:2; grid-template-columns:repeat(3,1fr); margin-top:24px">
+      <div class="card"><div class="ic">戦略 STRATEGY</div>
+        <h3>1パスで翻訳＋発話<span class="t">Translate + speak in one pass</span></h3>
+        <p>同じ音声ベースにLoRAアダプタを追加。ソーステキストから翻訳テキストと音声を同時生成。<span class="t">A LoRA adapter on the same audio base — source text → translated text and speech together.</span></p></div>
+      <div class="card"><div class="ic">データ DATA</div>
+        <h3>蒸留ペア × 実音声<span class="t">Distilled pairs × real audio</span></h3>
+        <p>既存の翻訳ラベルから<b>蒸留したテキストペア</b>＋ターゲット言語の音声。合成（<span class="mono">Kokoro-82M</span>）から<b>実スタジオ音声</b>へ移行。<span class="t">Distilled translation text pairs + target-language audio — moving from synthetic (Kokoro-82M) to real studio speech.</span></p></div>
+      <div class="card"><div class="ic">v6 デプロイ</div>
+        <h3>実音声で品質向上<span class="t">Real audio lifted quality</span></h3>
+        <p>5,509ペア + 実英語音声 <b>LibriTTS-R</b> 2,500本 → 合成のみのv3を上回る。日本語は <span class="mono">Common Voice JA</span> を追加。評価は chrF + 逆翻訳ASR。<span class="t">5,509 pairs + 2,500 real LibriTTS-R English wavs → beat synthetic-only v3; Common Voice JA added for Japanese. Eval: chrF + round-trip ASR.</span></p></div>
     </div>
-  </section>
+    <p class="lead r" style="--i:3; margin-top:16px; font-size:12.5px; max-width:none">
+      データは全て<b>合成／蒸留</b>、または<b>許諾ライセンス</b>のHuggingFaceデータセット — 独自コーパスは同梱せず、スクリプトから再現可能。
+      <span class="t">All data is synthetic/distilled or permissively-licensed HF datasets — no proprietary corpora shipped, fully reproducible from the scripts.</span>
+    </p>
+  </div></section>
+
+  <!-- 8 · USE CASES -->
+  <section class="slide"><div class="wrap">
+    <div class="kicker r" style="--i:0">製品 · The product</div>
+    <h2 class="r" style="--i:1">会議 <span class="grad">Kaigi</span> — オンデバイス会議アシスタント<span class="t">An on-device meeting assistant</span></h2>
+    <div class="grid r" style="--i:2; grid-template-columns:repeat(3,1fr); margin-top:24px">
+      <div class="card"><div class="ic">A · 文字起こし</div><h3>リアルタイムCS-ASR<span class="t">Live code-switched ASR</span></h3><p>二言語をそれぞれ正しい文字体系で即時に文字起こし。<span class="t">Real-time bilingual transcription, each in its correct script.</span></p></div>
+      <div class="card"><div class="ic">B · 発話</div><h3>翻訳して話す<span class="t">Translate &amp; speak</span></h3><p>日↔英をワンパスで翻訳・発話。相手言語で即座に再生。<span class="t">One-pass JA↔EN translate-and-speak, played live.</span></p></div>
+      <div class="card"><div class="ic">C · 要約</div><h3>自動 議事録<span class="t">Auto minutes</span></h3><p>会議終了時に端末上で構造化された議事録を生成。<span class="t">Structured minutes generated on-device at the end.</span></p></div>
+    </div>
+    <div class="grid r" style="--i:3; grid-template-columns:repeat(3,1fr); margin-top:14px">
+      <div class="card" style="padding:15px 18px"><p style="margin:0"><b>カスタマーサポート</b> — 機密な二言語通話の文字起こし。<span class="t">Customer support — private bilingual calls.</span></p></div>
+      <div class="card" style="padding:15px 18px"><p style="margin:0"><b>医療 / 法務</b> — 機密、端末外に出ない。<span class="t">Medical / legal — confidential, on-device.</span></p></div>
+      <div class="card" style="padding:15px 18px"><p style="margin:0"><b>教育</b> — 二言語講義の記録とノート。<span class="t">Education — bilingual lecture capture.</span></p></div>
+    </div>
+  </div></section>
+
+  <!-- 9 · CLOSE -->
+  <section class="slide"><div class="wrap" style="text-align:center">
+    <div class="kicker r" style="--i:0; justify-content:center">Hack the Liquid WAY · 2026</div>
+    <h1 class="r" style="--i:1">二言語の音声を、<br><span class="grad">正しい文字で</span>、<br>あなたの端末で。
+      <span class="t">Bilingual speech, in the right script, on your device.</span></h1>
+    <p class="lead r" style="--i:2; margin:22px auto 0; text-align:center">
+      LFM2.5-Audio + LoRA → <b>コードスイッチ Script Accuracy 80.8%</b>、日本語も維持、完全プライベート。
+      <span class="t">LFM2.5-Audio + LoRA → 80.8% code-switch Script Accuracy, Japanese intact, fully private.</span>
+    </p>
+    <p class="r mono" style="--i:3; margin-top:26px; font-size:11.5px; letter-spacing:.18em; color:var(--dim)">TRAINED ON HUGGING FACE GPUs &nbsp;·&nbsp; RUNS ON-DEVICE</p>
+  </div></section>
 
 </main>
 
 <script>
-  const deck=document.getElementById('deck'), slides=[...document.querySelectorAll('.slide')];
-  const dots=document.getElementById('dots'), prog=document.getElementById('prog');
+  const slides=[...document.querySelectorAll('.slide')], dots=document.getElementById('dots'), prog=document.getElementById('prog');
   slides.forEach((_,i)=>{const a=document.createElement('a'); a.href='#'; a.onclick=e=>{e.preventDefault(); slides[i].scrollIntoView()}; dots.appendChild(a)});
-  const da=[...dots.children];
-  let cur=0;
-  const io=new IntersectionObserver((es)=>{es.forEach(e=>{
+  const da=[...dots.children]; let cur=0;
+  const io=new IntersectionObserver((es)=>es.forEach(e=>{
     if(e.isIntersecting){e.target.classList.add('seen'); cur=slides.indexOf(e.target);
-      da.forEach((d,i)=>d.classList.toggle('on',i===cur));
-      prog.style.width=((cur+1)/slides.length*100)+'%';}
-  })},{threshold:.5});
+      da.forEach((d,i)=>d.classList.toggle('on',i===cur)); prog.style.width=((cur+1)/slides.length*100)+'%';}
+  }),{threshold:.5});
   slides.forEach(s=>io.observe(s));
   addEventListener('keydown',e=>{
-    if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '){e.preventDefault(); slides[Math.min(cur+1,slides.length-1)].scrollIntoView()}
-    if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault(); slides[Math.max(cur-1,0)].scrollIntoView()}
+    if(['ArrowRight','ArrowDown',' '].includes(e.key)){e.preventDefault(); slides[Math.min(cur+1,slides.length-1)].scrollIntoView()}
+    if(['ArrowLeft','ArrowUp'].includes(e.key)){e.preventDefault(); slides[Math.max(cur-1,0)].scrollIntoView()}
   });
 </script>
 </body>

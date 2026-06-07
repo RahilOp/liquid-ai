@@ -64,6 +64,16 @@ rank-32 + FLEURS mix (+43). English-mono WER remains the gap to close vs Whisper
   synthetic+real data mix, system prompt `Perform ASR.`
 - Training: **Hugging Face GPUs** (fine-tuned using Hugging Face GPU credits).
 
+## 🤗 Hugging Face
+
+Trained adapters and published data samples (the full corpora are large and
+reproducible from the scripts in `01-data-generation/` / `02-preprocessing/`):
+
+- **Fine-tuned LoRA adapters** — [`AwsheshNath/lfm2.5-audio-jp-kaigi-adapters`](https://huggingface.co/AwsheshNath/lfm2.5-audio-jp-kaigi-adapters)
+  · code-switch ASR · translate-and-speak · meeting-minutes
+- **Synthetic code-switching data (sample)** — [`AwsheshNath/synthetic-cs-sample`](https://huggingface.co/datasets/AwsheshNath/synthetic-cs-sample)
+- **CS-FLEURS JA–EN (sample)** — [`AwsheshNath/cs-fleurs-jpn-eng-sample`](https://huggingface.co/datasets/AwsheshNath/cs-fleurs-jpn-eng-sample)
+
 > Datasets, model weights, checkpoints, virtualenvs and logs are intentionally
 > excluded — they are large and reproducible from the scripts here. Augmented audio
 > is omitted for the same reason (regenerate with the augmentation scripts in `02-preprocessing/`).
