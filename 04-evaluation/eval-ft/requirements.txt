@@ -1,0 +1,34 @@
+# Core ML
+# Torch is pinned to CUDA 12.6 wheels. Plain `torch` resolves to the +cu130
+# (CUDA 13) build, which fails on this box's driver (565.x, max CUDA 12.7) with
+# "CUDA available: False / driver too old". cu126 is forward-compatible with the
+# 12.7 driver. liquid-audio is CUDA-first (from_pretrained defaults to 'cuda'),
+# so a working CUDA torch is mandatory, not optional.
+# On a box with a newer driver (>=CUDA 13), drop the +cu126 pins and the
+# --extra-index-url line to get the default cu130 build instead.
+--extra-index-url https://download.pytorch.org/whl/cu126
+torch==2.12.0+cu126
+torchaudio==2.11.0+cu126
+transformers>=4.44
+accelerate
+datasets
+numpy
+
+# Metrics / Japanese segmentation
+jiwer
+fugashi
+unidic-lite
+regex
+
+# Audio I/O
+soundfile
+librosa
+
+# ASR baselines
+faster-whisper
+liquid-audio
+
+# Fine-tuning + leaderboard UI
+peft
+streamlit
+pandas

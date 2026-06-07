@@ -1,38 +1,69 @@
-# EN-JP Code-Switching ASR — Liquid AI Hackathon (Track 2)
+# LFM2.5-Audio JP↔EN Code-Switching — Hackathon Submission
 
-On-device ASR for **English-Japanese code-switching** speech, built by
-fine-tuning **LiquidAI/LFM2.5-Audio-1.5B-JP**. Cloud ASR mangles bilingual
-speech (forces English into katakana, drops the minority language); an on-device
-fine-tune fixes this for privacy-sensitive use.
+**Hack the Liquid WAY — June 6–7, 2026, Tokyo**
 
-👉 **Read [`CONTEXT.md`](CONTEXT.md) first** — it's the full handoff (status,
-environment, verified API facts, how to resume on another GPU, next steps).
+A unified, on-device speech stack built by fine-tuning **`LiquidAI/LFM2.5-Audio-1.5B-JP`**
+for **Japanese↔English code-switching**. Generic cloud ASR mangles bilingual speech
+(forcing English into katakana, dropping the minority language); a tuned, fully offline
+model fixes this for privacy-sensitive (APPI-bound) meetings.
 
-## Quickstart
-```bash
-python3.12 -m venv .venv && .venv/bin/pip install -r requirements.txt
-.venv/bin/python tests/test_score.py                 # 6/6 pass
+The project is organized into three workstreams — **ASR fine-tuning**, **TTS
+fine-tuning**, and **evaluation** — grouped by pipeline stage. Within stages
+01–04 each appears as an `asr-ft/`, `tts-ft/`, `eval-ft/` subfolder.
 
-# pull JA-EN slice of CS-FLEURS (real read speech)
-.venv/bin/python data/load_csfleurs.py --method read --split test --limit 196
+## The three workstreams
 
-# baseline: LFM (or --model whisper) -> predictions -> metrics
-.venv/bin/python eval/run_baseline.py --model lfm \
-  --manifest data/csfleurs/read_test/manifest.jsonl --audio-root data/csfleurs \
-  --out artifacts/preds/lfm_read.jsonl
-.venv/bin/python eval/score.py lfm:artifacts/preds/lfm_read.jsonl
+| Workstream | Focus | Lives mainly in |
+|------------|-------|-----------------|
+| **`asr-ft/`** | Synthetic data generation + **ASR LoRA fine-tuning** pipeline (data → preprocess → train → eval → GGUF export) | stages 01–04, 06 |
+| **`eval-ft/`** | The **shared evaluation harness** + frozen CS-FLEURS / FLEURS benchmark (the held-out scoreboard every model is judged on) | stage 04 |
+| **`tts-ft/`** | The **Kaigi (会議) meeting assistant** — one audio base + 3 LoRA adapters (ASR / translate-and-speak / minutes), React web UI, CPU/GGUF path | stages 01–06 |
+
+## Layout (by pipeline stage)
+
+```
+01-data-generation/   synthetic CS/EN/JA speech + transcript generation, dataset downloads
+02-preprocessing/     JSONL->Arrow preprocessing, dataset balancing, manifest tooling, augmentation
+03-training/          LoRA training — ASR (asr-ft) + translate-TTS / minutes / ASR (tts-ft)
+04-evaluation/        eval-ft shared benchmark (primary) + per-workstream eval scripts
+05-app-and-demo/      kaigi-app (full Kaigi assistant + web UI) + asr-ft Gradio servers
+06-deployment/        on-device export — GGUF (llama.cpp) + ONNX notes
+docs/                 cross-cutting design docs: ASR training log, eval context, system architecture
 ```
 
-## Metrics (`eval/score.py`)
-**MER**, **JA-CER** (Japanese chars), **EN-WER** (English words), and **Script
-Accuracy** — the headline metric: % of English words kept in Latin script vs.
-wrongly forced into katakana. Identical normalization is applied to references
-and all hypotheses.
+Within stages 01–04 the work is split into `asr-ft/`, `eval-ft/`, `tts-ft/` subfolders.
 
-## First result (n=20 smoke test)
-Base LFM-JP zero-shot keeps only **16.7%** of English words in Latin (forces ~56%
-into katakana) — the gap the fine-tune targets. See `CONTEXT.md` §5.
+## Key result (frozen benchmark, n=196 CS + 200/200 mono)
 
-## Layout
-`eval/` scoring + baselines · `data/` dataset loaders + human-eval protocol ·
-`tests/` unit tests · `artifacts/` run outputs (git-ignored).
+ScriptAcc = % of English reference words kept in **Latin** script (vs forced into
+katakana) — the headline code-switching metric. JA-CER (char) / JA-WER (word, via
+fugashi) and EN-WER are the monolingual forgetting controls.
+
+| Model | CS ScriptAcc ↑ | CS MER ↓ | JA-CER ↓ | JA-WER ↓ | EN-WER ↓ |
+|-------|------|------|------|------|------|
+| LFM2.5-Audio-1.5B-JP (base) | 37.4% | 67.3% | 6.6% | 7.6% | 68.5% |
+| Whisper large-v3 (base) | 64.6% | 40.9% | 6.0% | 7.9% | **4.2%** |
+| LFM + LoRA — data-aug, no encoder LoRA | 43.6% | 54.3% | 8.2% | 8.7% | 80.2% |
+| LFM + LoRA — + Conformer encoder LoRA | 61.8% | 54.1% | 9.4% | 10.2% | 73.1% |
+| **LFM + LoRA — r32 encoder LoRA + FLEURS mix (best)** | **80.8%** | **27.0%** | **6.4%** | **7.2%** | 37.1% |
+
+Our best LoRA (**rank-32 Conformer-encoder LoRA + a FLEURS-balanced data mix**)
+lifts code-switch Script Accuracy **37% → 81%** and cuts MER **67% → 27%** —
+**surpassing Whisper large-v3 on code-switching** — while keeping Japanese fully
+intact (CER 6.6 → 6.4, **no forgetting**) and roughly halving the base model's
+English error (WER 68.5% → 37.1%). The ablation rows trace the gains: data
+augmentation alone (+6 ScriptAcc), adding Conformer-encoder LoRA (+24), then
+rank-32 + FLEURS mix (+43). English-mono WER remains the gap to close vs Whisper's 4.2%.
+
+## Model
+
+- Base: `LiquidAI/LFM2.5-Audio-1.5B-JP` — Liquid Foundation Model (hybrid SSM + attention)
+  + 17-layer Conformer audio encoder, 1.5B params.
+- Adaptation: **LoRA** (added manually via PEFT — not built into `liquid-audio`). Best ASR
+  recipe: LM LoRA r=8 + **Conformer encoder LoRA r=32**, trained on a FLEURS-balanced
+  synthetic+real data mix, system prompt `Perform ASR.`
+- Training: **Hugging Face GPUs** (fine-tuned using Hugging Face GPU credits).
+
+> Datasets, model weights, checkpoints, virtualenvs and logs are intentionally
+> excluded — they are large and reproducible from the scripts here. Augmented audio
+> is omitted for the same reason (regenerate with the augmentation scripts in `02-preprocessing/`).

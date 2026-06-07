@@ -1,25 +1,43 @@
-# Python venv — recreate from requirements.txt on the target machine
+# Python
 .venv/
+venv/
+.venv_train/
 __pycache__/
 *.pyc
+*.egg-info/
 
-# Model / dataset caches (re-downloaded on target GPU)
-models/
-.cache/
-*.safetensors
-*.bin
+# Local tooling / internal (not for publish)
+.claude/
+artifacts/
+*.log
+# internal working/handoff notes
+CONTEXT.md
 
-# Audio & generated data (large / not for git)
-data/csfleurs/
-data/human_eval/audio/
+# Datasets & generated audio — regenerate via the data scripts.
+# (The loader/generator .py scripts are kept; only heavy/generated data is ignored.)
+**/data/csfleurs/
+**/data/fleurs/
+**/data/**/audio/
+**/data/training/
+**/preprocessed*/
 *.wav
 *.flac
 *.mp3
+*.arrow
+# frozen eval manifests + leaderboard (regenerable from load_*.py)
+**/data/eval/*.jsonl
+**/data/eval/leaderboard.json
 
-# Run outputs
-artifacts/
-*.log
+# Model weights / checkpoints / exports (large)
+*.safetensors
+*.bin
+*.gguf
+*.onnx
+models/
+checkpoints/
+.cache/
 
 # Secrets
 .env
 *.key
+*hf*.txt
