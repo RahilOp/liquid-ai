@@ -36,7 +36,6 @@ CONTEXT.md
 models/
 checkpoints/
 .cache/
-code-switching/
 
 # Secrets
 .env
