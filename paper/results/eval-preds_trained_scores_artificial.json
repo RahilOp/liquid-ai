@@ -1,0 +1,354 @@
+[
+  {
+    "model": "base-tiny",
+    "n": 200,
+    "MER": 0.6504,
+    "JA_CER": 0.7597,
+    "JA_WER": 0.3991,
+    "EN_WER": 0.9973,
+    "ScriptAcc": 0.0041,
+    "en_ref_words": 736,
+    "ja_ref_chars": 4278,
+    "ja_ref_words": 2601,
+    "edits": {
+      "mer": {
+        "sub": 1092,
+        "del": 53,
+        "ins": 2116,
+        "ref": 5014
+      },
+      "ja_cer": {
+        "sub": 355,
+        "del": 55,
+        "ins": 2840,
+        "ref": 4278
+      },
+      "ja_wer": {
+        "sub": 244,
+        "del": 9,
+        "ins": 785,
+        "ref": 2601
+      },
+      "en_wer": {
+        "sub": 1,
+        "del": 733,
+        "ins": 0,
+        "ref": 736
+      }
+    },
+    "script_breakdown": {
+      "latin": 3,
+      "katakana": 626,
+      "other_jp": 107,
+      "dropped": 0
+    }
+  },
+  {
+    "model": "ft-tiny",
+    "n": 200,
+    "MER": 0.3073,
+    "JA_CER": 0.3291,
+    "JA_WER": 0.2987,
+    "EN_WER": 0.9592,
+    "ScriptAcc": 0.7704,
+    "en_ref_words": 736,
+    "ja_ref_chars": 4278,
+    "ja_ref_words": 2601,
+    "edits": {
+      "mer": {
+        "sub": 743,
+        "del": 450,
+        "ins": 348,
+        "ref": 5014
+      },
+      "ja_cer": {
+        "sub": 43,
+        "del": 898,
+        "ins": 467,
+        "ref": 4278
+      },
+      "ja_wer": {
+        "sub": 43,
+        "del": 554,
+        "ins": 180,
+        "ref": 2601
+      },
+      "en_wer": {
+        "sub": 113,
+        "del": 134,
+        "ins": 459,
+        "ref": 736
+      }
+    },
+    "script_breakdown": {
+      "latin": 567,
+      "katakana": 79,
+      "other_jp": 61,
+      "dropped": 29
+    }
+  },
+  {
+    "model": "base-base",
+    "n": 200,
+    "MER": 0.6418,
+    "JA_CER": 0.7464,
+    "JA_WER": 0.3702,
+    "EN_WER": 0.9959,
+    "ScriptAcc": 0.0095,
+    "en_ref_words": 736,
+    "ja_ref_chars": 4278,
+    "ja_ref_words": 2601,
+    "edits": {
+      "mer": {
+        "sub": 1067,
+        "del": 51,
+        "ins": 2100,
+        "ref": 5014
+      },
+      "ja_cer": {
+        "sub": 331,
+        "del": 54,
+        "ins": 2808,
+        "ref": 4278
+      },
+      "ja_wer": {
+        "sub": 202,
+        "del": 3,
+        "ins": 758,
+        "ref": 2601
+      },
+      "en_wer": {
+        "sub": 5,
+        "del": 728,
+        "ins": 0,
+        "ref": 736
+      }
+    },
+    "script_breakdown": {
+      "latin": 7,
+      "katakana": 643,
+      "other_jp": 86,
+      "dropped": 0
+    }
+  },
+  {
+    "model": "ft-base",
+    "n": 200,
+    "MER": 0.0425,
+    "JA_CER": 0.0376,
+    "JA_WER": 0.0381,
+    "EN_WER": 0.1264,
+    "ScriptAcc": 0.9497,
+    "en_ref_words": 736,
+    "ja_ref_chars": 4278,
+    "ja_ref_words": 2601,
+    "edits": {
+      "mer": {
+        "sub": 97,
+        "del": 17,
+        "ins": 99,
+        "ref": 5014
+      },
+      "ja_cer": {
+        "sub": 18,
+        "del": 25,
+        "ins": 118,
+        "ref": 4278
+      },
+      "ja_wer": {
+        "sub": 22,
+        "del": 12,
+        "ins": 65,
+        "ref": 2601
+      },
+      "en_wer": {
+        "sub": 38,
+        "del": 33,
+        "ins": 22,
+        "ref": 736
+      }
+    },
+    "script_breakdown": {
+      "latin": 699,
+      "katakana": 6,
+      "other_jp": 29,
+      "dropped": 2
+    }
+  },
+  {
+    "model": "base-small",
+    "n": 200,
+    "MER": 0.5742,
+    "JA_CER": 0.6681,
+    "JA_WER": 0.3018,
+    "EN_WER": 0.8913,
+    "ScriptAcc": 0.1114,
+    "en_ref_words": 736,
+    "ja_ref_chars": 4278,
+    "ja_ref_words": 2601,
+    "edits": {
+      "mer": {
+        "sub": 827,
+        "del": 42,
+        "ins": 2010,
+        "ref": 5014
+      },
+      "ja_cer": {
+        "sub": 174,
+        "del": 37,
+        "ins": 2647,
+        "ref": 4278
+      },
+      "ja_wer": {
+        "sub": 111,
+        "del": 5,
+        "ins": 669,
+        "ref": 2601
+      },
+      "en_wer": {
+        "sub": 3,
+        "del": 653,
+        "ins": 0,
+        "ref": 736
+      }
+    },
+    "script_breakdown": {
+      "latin": 82,
+      "katakana": 588,
+      "other_jp": 60,
+      "dropped": 6
+    }
+  },
+  {
+    "model": "ft-small",
+    "n": 200,
+    "MER": 0.0062,
+    "JA_CER": 0.0054,
+    "JA_WER": 0.0069,
+    "EN_WER": 0.019,
+    "ScriptAcc": 0.9986,
+    "en_ref_words": 736,
+    "ja_ref_chars": 4278,
+    "ja_ref_words": 2601,
+    "edits": {
+      "mer": {
+        "sub": 16,
+        "del": 5,
+        "ins": 10,
+        "ref": 5014
+      },
+      "ja_cer": {
+        "sub": 5,
+        "del": 11,
+        "ins": 7,
+        "ref": 4278
+      },
+      "ja_wer": {
+        "sub": 5,
+        "del": 7,
+        "ins": 6,
+        "ref": 2601
+      },
+      "en_wer": {
+        "sub": 5,
+        "del": 0,
+        "ins": 9,
+        "ref": 736
+      }
+    },
+    "script_breakdown": {
+      "latin": 735,
+      "katakana": 0,
+      "other_jp": 1,
+      "dropped": 0
+    }
+  },
+  {
+    "model": "base-lgv3",
+    "n": 200,
+    "MER": 0.5796,
+    "JA_CER": 0.6774,
+    "JA_WER": 0.2714,
+    "EN_WER": 0.8791,
+    "ScriptAcc": 0.1236,
+    "en_ref_words": 736,
+    "ja_ref_chars": 4278,
+    "ja_ref_words": 2601,
+    "edits": {
+      "mer": {
+        "sub": 830,
+        "del": 37,
+        "ins": 2039,
+        "ref": 5014
+      },
+      "ja_cer": {
+        "sub": 187,
+        "del": 33,
+        "ins": 2678,
+        "ref": 4278
+      },
+      "ja_wer": {
+        "sub": 104,
+        "del": 6,
+        "ins": 596,
+        "ref": 2601
+      },
+      "en_wer": {
+        "sub": 3,
+        "del": 644,
+        "ins": 0,
+        "ref": 736
+      }
+    },
+    "script_breakdown": {
+      "latin": 91,
+      "katakana": 627,
+      "other_jp": 13,
+      "dropped": 5
+    }
+  },
+  {
+    "model": "ft-lgv3",
+    "n": 200,
+    "MER": 0.0036,
+    "JA_CER": 0.003,
+    "JA_WER": 0.0038,
+    "EN_WER": 0.0068,
+    "ScriptAcc": 1.0,
+    "en_ref_words": 736,
+    "ja_ref_chars": 4278,
+    "ja_ref_words": 2601,
+    "edits": {
+      "mer": {
+        "sub": 8,
+        "del": 2,
+        "ins": 8,
+        "ref": 5014
+      },
+      "ja_cer": {
+        "sub": 6,
+        "del": 2,
+        "ins": 5,
+        "ref": 4278
+      },
+      "ja_wer": {
+        "sub": 7,
+        "del": 0,
+        "ins": 3,
+        "ref": 2601
+      },
+      "en_wer": {
+        "sub": 2,
+        "del": 0,
+        "ins": 3,
+        "ref": 736
+      }
+    },
+    "script_breakdown": {
+      "latin": 736,
+      "katakana": 0,
+      "other_jp": 0,
+      "dropped": 0
+    }
+  }
+]
