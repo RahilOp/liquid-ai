@@ -34,7 +34,10 @@ from run_baseline import load_audio_mono, read_manifest  # noqa: E402
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Run an HF transformers Whisper checkpoint")
-    ap.add_argument("--model-id", required=True, help="HF repo id or local path")
+    ap.add_argument("--model-id", required=True, help="HF repo id or local path (base model)")
+    ap.add_argument("--lora-adapter", default=None,
+                    help="Optional PEFT LoRA adapter dir to merge onto --model-id "
+                         "(fine-tuned Whisper eval without a merged HF repo)")
     ap.add_argument("--manifest", required=True)
     ap.add_argument("--audio-root", default=".")
     ap.add_argument("--out", required=True)
@@ -64,15 +67,32 @@ def main(argv: list[str] | None = None) -> int:
     device = 0 if torch.cuda.is_available() else -1
     dtype = torch.float16 if torch.cuda.is_available() else torch.float32
     dev_name = torch.cuda.get_device_name(0) if device == 0 else "cpu"
-    print(f"[whisper-hf] loading {args.model_id} on {dev_name} ({dtype})")
-    pipe = pipeline(
-        "automatic-speech-recognition",
-        model=args.model_id,
-        token=token,
-        device=device,
-        torch_dtype=dtype,
-        chunk_length_s=args.chunk_length_s,
-    )
+
+    if args.lora_adapter:
+        # Load base Whisper, merge the PEFT LoRA adapter, build the pipeline from
+        # the merged model. Processor/tokenizer come from the adapter dir (it
+        # carries the fine-tune's tokenizer + added tokens).
+        from transformers import WhisperForConditionalGeneration, WhisperProcessor
+        from peft import PeftModel
+        print(f"[whisper-hf] base {args.model_id} + LoRA {args.lora_adapter} on {dev_name} ({dtype})")
+        base = WhisperForConditionalGeneration.from_pretrained(
+            args.model_id, torch_dtype=dtype, token=token)
+        merged = PeftModel.from_pretrained(base, args.lora_adapter).merge_and_unload()
+        if device == 0:
+            merged = merged.to("cuda")
+        proc = WhisperProcessor.from_pretrained(args.lora_adapter)
+        pipe = pipeline(
+            "automatic-speech-recognition",
+            model=merged, tokenizer=proc.tokenizer, feature_extractor=proc.feature_extractor,
+            device=device, torch_dtype=dtype, chunk_length_s=args.chunk_length_s,
+        )
+    else:
+        print(f"[whisper-hf] loading {args.model_id} on {dev_name} ({dtype})")
+        pipe = pipeline(
+            "automatic-speech-recognition",
+            model=args.model_id, token=token, device=device,
+            torch_dtype=dtype, chunk_length_s=args.chunk_length_s,
+        )
     print("[whisper-hf] loaded.")
 
     gen_kwargs = {"task": "transcribe"}

@@ -1,0 +1,16 @@
+# build products
+# main.pdf IS tracked - co-authors should be able to read the draft without a
+# LaTeX toolchain. Re-run ./build.sh and commit it alongside main.tex changes.
+main.log
+*.aux
+*.bbl
+*.blg
+*.out
+# vendored toolchain (re-fetch with build.sh instructions in README)
+.tools/
+# figure preview renders
+figures/*.png
+!figures/dataset_composition.png
+!figures/final_wer_cer_comparison.png
+!figures/learning_curve_wer.png
+!figures/lora_architecture.png

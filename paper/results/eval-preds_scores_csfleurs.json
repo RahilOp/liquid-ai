@@ -1,0 +1,90 @@
+[
+  {
+    "model": "base",
+    "n": 196,
+    "MER": 0.4091,
+    "JA_CER": 0.4979,
+    "JA_WER": 0.2461,
+    "EN_WER": 0.4743,
+    "ScriptAcc": 0.6464,
+    "en_ref_words": 1632,
+    "ja_ref_chars": 6289,
+    "ja_ref_words": 3876,
+    "edits": {
+      "mer": {
+        "sub": 1006,
+        "del": 420,
+        "ins": 1854,
+        "ref": 8017
+      },
+      "ja_cer": {
+        "sub": 261,
+        "del": 507,
+        "ins": 2363,
+        "ref": 6289
+      },
+      "ja_wer": {
+        "sub": 177,
+        "del": 209,
+        "ins": 568,
+        "ref": 3876
+      },
+      "en_wer": {
+        "sub": 73,
+        "del": 562,
+        "ins": 139,
+        "ref": 1632
+      }
+    },
+    "script_breakdown": {
+      "latin": 1055,
+      "katakana": 457,
+      "other_jp": 73,
+      "dropped": 47
+    }
+  },
+  {
+    "model": "ft",
+    "n": 196,
+    "MER": 0.2607,
+    "JA_CER": 0.3021,
+    "JA_WER": 0.1816,
+    "EN_WER": 0.3223,
+    "ScriptAcc": 0.8051,
+    "en_ref_words": 1632,
+    "ja_ref_chars": 6289,
+    "ja_ref_words": 3876,
+    "edits": {
+      "mer": {
+        "sub": 784,
+        "del": 378,
+        "ins": 928,
+        "ref": 8017
+      },
+      "ja_cer": {
+        "sub": 272,
+        "del": 439,
+        "ins": 1189,
+        "ref": 6289
+      },
+      "ja_wer": {
+        "sub": 193,
+        "del": 160,
+        "ins": 351,
+        "ref": 3876
+      },
+      "en_wer": {
+        "sub": 123,
+        "del": 297,
+        "ins": 106,
+        "ref": 1632
+      }
+    },
+    "script_breakdown": {
+      "latin": 1314,
+      "katakana": 208,
+      "other_jp": 73,
+      "dropped": 37
+    }
+  }
+]

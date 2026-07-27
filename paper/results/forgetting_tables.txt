@@ -1,0 +1,68 @@
+########## whisper-tiny — JA-only (FLEURS ja_jp test, JA-CER matters) ##########
+Model   N    MER↓    JA-CER↓  JA-WER↓  EN-WER↓  ScriptAcc↑  EN-w  JA-ch
+------  ---  ------  -------  -------  -------  ----------  ----  -----
+base    200   37.5%   37.6%    42.3%    86.7%    30.0%      30    10122
+csonly  200   43.8%   43.8%    49.2%   406.7%    33.3%      30    10122
+csmono  200   38.9%   38.9%    45.1%    93.3%    36.7%      30    10122
+########## whisper-tiny — EN-only (FLEURS en_us test, EN-WER matters) ##########
+Model   N    MER↓    JA-CER↓  JA-WER↓  EN-WER↓  ScriptAcc↑  EN-w  JA-ch
+------  ---  ------  -------  -------  -------  ----------  ----  -----
+base    200   12.3%    0.0%     0.0%    12.0%    98.6%      4499  0    
+csonly  200   13.7%    0.0%     0.0%    13.4%    98.8%      4499  0    
+csmono  200   12.1%    0.0%     0.0%    11.8%    98.7%      4499  0    
+########## whisper-tiny — CS-FLEURS (cs+mono) ##########
+Model   N    MER↓    JA-CER↓  JA-WER↓  EN-WER↓  ScriptAcc↑  EN-w  JA-ch
+------  ---  ------  -------  -------  -------  ----------  ----  -----
+csmono  196   77.9%   90.6%    69.3%    94.3%    61.6%      1632  6289 
+
+########## whisper-base — JA-only (FLEURS ja_jp test, JA-CER matters) ##########
+Model   N    MER↓    JA-CER↓  JA-WER↓  EN-WER↓  ScriptAcc↑  EN-w  JA-ch
+------  ---  ------  -------  -------  -------  ----------  ----  -----
+base    200   25.0%   25.1%    30.1%    66.7%    40.0%      30    10122
+csonly  200   33.7%   33.7%    36.9%   610.0%    56.7%      30    10122
+csmono  200   26.1%   26.1%    31.5%   193.3%    46.7%      30    10122
+########## whisper-base — EN-only (FLEURS en_us test, EN-WER matters) ##########
+Model   N    MER↓    JA-CER↓  JA-WER↓  EN-WER↓  ScriptAcc↑  EN-w  JA-ch
+------  ---  ------  -------  -------  -------  ----------  ----  -----
+base    200    8.9%    0.0%     0.0%     8.6%    98.7%      4499  0    
+csonly  200   10.3%    0.0%     0.0%    10.0%    98.8%      4499  0    
+csmono  200    9.2%    0.0%     0.0%     8.9%    99.0%      4499  0    
+########## whisper-base — CS-FLEURS (cs+mono) ##########
+Model   N    MER↓    JA-CER↓  JA-WER↓  EN-WER↓  ScriptAcc↑  EN-w  JA-ch
+------  ---  ------  -------  -------  -------  ----------  ----  -----
+csmono  196   57.4%   68.1%    51.5%    63.4%    72.0%      1632  6289 
+
+########## whisper-small — JA-only (FLEURS ja_jp test, JA-CER matters) ##########
+Model   N    MER↓    JA-CER↓  JA-WER↓  EN-WER↓  ScriptAcc↑  EN-w  JA-ch
+------  ---  ------  -------  -------  -------  ----------  ----  -----
+base    200   14.0%   14.1%    17.3%    56.7%    50.0%      30    10122
+csonly  200   42.6%   42.7%    40.8%   4223.3%   73.3%      30    10122
+csmono  200   15.2%   15.2%    18.7%   126.7%    50.0%      30    10122
+########## whisper-small — EN-only (FLEURS en_us test, EN-WER matters) ##########
+Model   N    MER↓    JA-CER↓  JA-WER↓  EN-WER↓  ScriptAcc↑  EN-w  JA-ch
+------  ---  ------  -------  -------  -------  ----------  ----  -----
+base    200    7.0%    0.0%     0.0%     6.8%    98.4%      4499  0    
+csonly  200    6.8%    0.0%     0.0%     6.7%    99.0%      4499  0    
+csmono  200    7.0%    0.0%     0.0%     6.5%    99.0%      4499  0    
+########## whisper-small — CS-FLEURS (cs+mono) ##########
+Model   N    MER↓    JA-CER↓  JA-WER↓  EN-WER↓  ScriptAcc↑  EN-w  JA-ch
+------  ---  ------  -------  -------  -------  ----------  ----  -----
+csmono  196   41.1%   48.1%    35.5%    50.4%    78.4%      1632  6289 
+
+########## whisper-large-v3 — JA-only (FLEURS ja_jp test, JA-CER matters) ##########
+Model   N    MER↓    JA-CER↓  JA-WER↓  EN-WER↓  ScriptAcc↑  EN-w  JA-ch
+------  ---  ------  -------  -------  -------  ----------  ----  -----
+base    200    6.1%    6.0%     7.8%    73.3%    50.0%      30    10122
+csonly  200   20.3%   20.5%    13.8%   1213.3%   93.3%      30    10122
+csmono  200    6.1%    6.0%     7.7%    70.0%    80.0%      30    10122
+########## whisper-large-v3 — EN-only (FLEURS en_us test, EN-WER matters) ##########
+Model   N    MER↓    JA-CER↓  JA-WER↓  EN-WER↓  ScriptAcc↑  EN-w  JA-ch
+------  ---  ------  -------  -------  -------  ----------  ----  -----
+base    200    4.3%    0.0%     0.0%     4.2%    99.1%      4499  0    
+csonly  200    4.8%    0.0%     0.0%     4.7%    99.2%      4499  0    
+csmono  200    5.1%    0.0%     0.0%     4.9%    98.5%      4499  0    
+########## whisper-large-v3 — CS-FLEURS (cs+mono) ##########
+Model   N    MER↓    JA-CER↓  JA-WER↓  EN-WER↓  ScriptAcc↑  EN-w  JA-ch
+------  ---  ------  -------  -------  -------  ----------  ----  -----
+csmono  196   17.0%   19.1%    13.0%    23.2%    92.3%      1632  6289 
+CS_MONO_DONE
