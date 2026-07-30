@@ -42,3 +42,4 @@ code-switching/
 .env
 *.key
 *hf*.txt
+token.txt

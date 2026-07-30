@@ -188,7 +188,12 @@ From inspecting installed `liquid_audio 1.3.0`:
   word stream. **Script Accuracy** = of EN reference words, fraction the model
   rendered in Latin (vs katakana/other/dropped) — the headline metric.
 - Identical normalization (NFKC, lowercase, punctuation→space, English fillers
-  dropped) applied to references AND every hypothesis. Details in `eval/score.py` docstring.
+  removed) applied to references AND every hypothesis. Details in `eval/score.py` docstring.
+- **Bootstrap CIs** and **paired comparisons** via `--bootstrap` / `--paired`.
+- **Switch-point analysis** (`--switch-report`) stratifies token accuracy by
+  distance to EN/JP boundaries and ScriptAcc by switch type / embedded-span length.
+- A **script audit** (`--audit`) lists every English reference word and its
+  hypothesis rendering, separating dropped words from transliterations.
 - Annotation/script-policy conventions for the human gold set: `docs/human-eval-protocol.md`.
 
 ## 9. Strategy / decisions (agreed)

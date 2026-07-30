@@ -81,6 +81,64 @@ def test_corpus_aggregation_and_row():
     assert row["ScriptAcc"] == 0.5
 
 
+def test_partial_transliteration_counts_as_other_jp():
+    # Reference English word partly translated to Japanese (katakana + kanji).
+    hyp = "明日 ミーティング会議 を merge します"
+    parts = score.score_pair(REF, hyp)
+    sc = parts["script"]
+    assert sc.en_ref == 3
+    # "pull" and "request" become one Japanese token => other_jp, not latin.
+    assert sc.other_jp >= 1
+
+
+def test_romaji_false_positive_is_known_limitation():
+    # A romaji phonetic rendering is made of Latin letters, so the current
+    # token-only ScriptAcc counts it as "latin". This is a documented limitation.
+    ref = "明日 meeting を merge します"
+    hyp = "明日 miitingu を マージ します"
+    parts = score.score_pair(ref, hyp)
+    sc = parts["script"]
+    assert sc.en_ref == 2
+    assert sc.latin == 1          # miitingu (incorrectly counted as Latin)
+    assert sc.katakana == 1       # マージ
+
+
+def test_bootstrap_ci_structure():
+    records = [
+        {"id": "a", "reference": REF, "hypothesis": REF},
+        {"id": "b", "reference": REF, "hypothesis": "明日 プルリクエスト を マージ します"},
+    ]
+    counts = score.per_utterance_counts(records)
+    cis = score.bootstrap_ci(counts, n_samples=10, ci=95, rng=score.random.Random(0))
+    for metric in ("MER", "JA_CER", "JA_WER", "EN_WER", "ScriptAcc"):
+        assert metric in cis
+        assert "lo" in cis[metric] and "hi" in cis[metric] and "mean" in cis[metric]
+
+
+def test_paired_bootstrap_requires_same_length():
+    a = score.per_utterance_counts([{"reference": REF, "hypothesis": REF}])
+    b = score.per_utterance_counts([{"reference": REF, "hypothesis": REF},
+                                     {"reference": REF, "hypothesis": REF}])
+    try:
+        score.paired_bootstrap(a, b, 10, 95, score.random.Random(0))
+        assert False, "expected ValueError"
+    except ValueError:
+        pass
+
+
+def test_switch_point_analysis_counts():
+    counts = score.analyze_switch_points(REF, REF, REF)
+    # The reference has 3 English words adjacent to Japanese chars -> switch points.
+    assert counts["switch_type"]["intra"]["en_ref"] == 3
+    # "pull request" is a consecutive English phrase, "merge" is a single word.
+    assert counts["span_length"]["single"]["en_ref"] == 1
+    assert counts["span_length"]["phrase"]["en_ref"] == 2
+    # Perfect hypothesis: all correct; downstream errors are zero because there
+    # are no katakana substitutions.
+    assert counts["distance"]["0"]["tokens"] > 0
+    assert counts["distance"]["0"]["correct"] == counts["distance"]["0"]["tokens"]
+
+
 def _run_all():
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
     failed = 0

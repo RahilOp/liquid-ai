@@ -33,6 +33,32 @@ basically a mixture of two or more metals…" sentence appears in EN-only, JA-on
 Manifests are committed (ids + gold refs + metadata); WAVs are git-ignored and
 regenerated deterministically from HF.
 
+## Scoring harness extras
+
+The shared scorer (`eval/score.py`) now supports:
+
+- **Bootstrap confidence intervals** for every metric:
+  ```bash
+  python eval/score.py model:preds.jsonl --bootstrap 1000 --ci 95 --json out.json
+  ```
+- **Paired bootstrap comparisons** between two systems (same resampled utterances):
+  ```bash
+  python eval/score.py a:preds_a.jsonl b:preds_b.jsonl --bootstrap 1000 --paired
+  ```
+- **Switch-point stratification** (`--switch-report`) and per-English-word **script audit**
+  (`--audit`):
+  ```bash
+  python eval/score.py model:preds.jsonl \
+      --switch-report results/switch_analysis.json \
+      --audit results/script_audit.json
+  ```
+
+The normalisation audit currently separates dropped English words from
+katakana/other-Japanese substitutions. Phonetic romaji renderings (e.g.
+``miitingu`` for ``meeting``) are counted as Latin script because the token-only
+alignment cannot distinguish them from valid English; the `--audit` JSON flags
+any Latin hypothesis that does not exactly match the reference for manual review.
+
 ## Regenerate audio (any box)
 ```bash
 .venv/bin/python data/load_csfleurs.py --method read --split test --limit 196   # -> data/csfleurs/
